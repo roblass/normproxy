@@ -1,4 +1,0 @@
-normproxy
-=========
-
-NORM Proxy

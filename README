@@ -1,0 +1,101 @@
+normproxy:  This is a proxy for norm applications.  Interacts with other
+^^^^^^^^^   applications over standard TCP ports, and sends and receives data
+            on their behalf using NORM.
+
+BUILD:  Building this requires NORM and Protolib.  They are available at:
+
+http://downloads.pf.itd.nrl.navy.mil/norm/
+
+and
+
+http://cs.itd.nrl.navy.mil/work/protolib/index.php
+
+respectively.  You may have to edit the Makefile to include the path to these
+libraries.
+
+USAGE:
+normproxy [-B NORM-block-size] [-D debug] [-P NORM-num-parity]
+[-a NORM-maddr] [-b NORM-buffer-space] [-c client-device] [-d norm-device] 
+[-n NORM-session-id] [-p client-port] [-s NORM-segment-size] [-z NORM-port]
+
+Please see the NORM documentation for the meaning of the NORM parameters (eg:
+blockSize, numParity, etc).
+
+OPTIONS:
+	-B NORM-block-size, --block-size=NORM-block-size
+		Sets the blockSize in NORM.  The default is 64 bytes.
+
+	-D debug, --debug
+		Turn on debugging messages.
+
+	-P NORM-num-parity, --num-parity=NORM-num-parity
+		Sets numParity in NORM.  The default is 16 bits.
+
+	-a NORM-maddr, --mcast-address=NORM-maddr
+		Set the multicast address that NORM will use to send and receive.  The
+		default is 224.1.2.3.
+
+	-b NORM-buffer-space, --buffer-space=NORM-buffer-space
+		Sets bufferSpace in NORM.  The default is 1024*1024 = 1048576 bytes.
+
+	-c device, --client-device=device
+		Set the network device to listen for clients on.
+
+	-d device, --norm-device=device
+		Set the device over which to use NORM.
+
+	-e, --duplex
+		Put the software into duplex mode.  Proactively connect to a remote
+		server to send outgoing data, and listen on client port for incoming
+		data.
+
+	-i id, --norm-node-id
+		Use id as the NormNodeID.  Default is to generate a random number
+		(after seeding with the system clock).
+
+	-n NORM-session-id, --session-id=NORM-session-id
+		Sets sessionId in NORM.  The default is 1027.
+
+	-p port, --proxy-port=port
+		Sets the port to listen for clients on (listening mode, default).  The
+		default port is 1027.
+
+	-q port, --remote-port=port
+		Sets the port the proxy should connect to (proactive mode).  The
+		default port is 1027.
+
+	-s NORM-segment-size, --segment-size=NORM-segment-size
+		Sets segmentSize in NORM.  The default is 1400.
+	
+	-y addr, --server-address=addr
+		Connect to a server.  This will put the proxy into interactive mode.
+
+	-z port, --norm-port=port
+		Set the port to send / receive NORM traffic to / from.  The default is
+		6003.
+	
+
+Examples:
+
+Listen on port 5222 for incoming traffic, relay traffic between it and
+NORM using the default multicast address and port.
+
+	./normproxy -p 5222
+
+Listen on port 1337 for a client connection and relay traffic between it and
+NORM using the multicast address 224.3.2.1:5478:
+
+	./normproxy -p 1337 -a 224.3.2.1 -z 
+
+Connect to a server at jabber.fireopen.net:5222, and relay all traffic between
+it and NORM using the default multicast address and port.
+	
+	./normproxy -y jabber.mychatdomain.net -p 5222
+
+
+Note:  The first and last example could be put together (the first proxying
+the client, the last the server) to establish an XMPP connection over NORM,
+although this has not been tried.
+	
+Contact:  Robert Lass <rob.lass@gmail.com> 
+^^^^^^^
